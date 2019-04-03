@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		88482DE32254434600A35F39 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88482DE22254434600A35F39 /* main.cpp */; };
+		88482DEB2254438D00A35F39 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88482DEA2254438D00A35F39 /* SDL2.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		88482DF12254551B00A35F39 /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88482DEF2254551B00A35F39 /* window.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,9 @@
 /* Begin PBXFileReference section */
 		88482DDF2254434600A35F39 /* tetris */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tetris; sourceTree = BUILT_PRODUCTS_DIR; };
 		88482DE22254434600A35F39 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		88482DEA2254438D00A35F39 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		88482DEF2254551B00A35F39 /* window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = "<group>"; };
+		88482DF02254551B00A35F39 /* window.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = window.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88482DEB2254438D00A35F39 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +49,7 @@
 			children = (
 				88482DE12254434600A35F39 /* tetris */,
 				88482DE02254434600A35F39 /* Products */,
+				88482DE92254438D00A35F39 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +65,18 @@
 			isa = PBXGroup;
 			children = (
 				88482DE22254434600A35F39 /* main.cpp */,
+				88482DEF2254551B00A35F39 /* window.cpp */,
+				88482DF02254551B00A35F39 /* window.hpp */,
 			);
 			path = tetris;
+			sourceTree = "<group>";
+		};
+		88482DE92254438D00A35F39 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88482DEA2254438D00A35F39 /* SDL2.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88482DE32254434600A35F39 /* main.cpp in Sources */,
+				88482DF12254551B00A35F39 /* window.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +258,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -248,6 +270,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
