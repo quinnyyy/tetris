@@ -22,13 +22,23 @@ int main(int argc, char* args[]) {
     if (fxns.init(&window, &surface, SCREEN_WIDTH, SCREEN_HEIGHT)) {
         renderer = SDL_CreateRenderer(window, 0, 0);
         
-        block test(LONG);
-        Board.updateBlock(test, false);
+        //block test(SQUARE);
+        //Board.updateBlock(&test, false);
+
         
         bool quit = false;
         SDL_Event e;
         
+        bool newBlock = true;
+        block* myBlock = nullptr;
+        
         while (!quit) {
+            if (newBlock == true) {
+                if (myBlock == nullptr) delete myBlock;
+                myBlock = new block(SQUARE);
+                Board.updateBlock(myBlock, false);
+                newBlock = false;
+            }
             while (SDL_PollEvent(&e) != 0) {
                 if (e.type == SDL_QUIT) {
                     quit = true;
@@ -36,6 +46,12 @@ int main(int argc, char* args[]) {
                     switch(e.key.keysym.sym) {
                         case SDLK_UP: {
                             quit = true;
+                            break;
+                        }
+                        case SDLK_DOWN: {
+                            //Board.updateBlock(&test,false);
+                            newBlock = myBlock -> move(DOWN, &Board);
+                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         default: {

@@ -151,6 +151,31 @@ Color block :: getColor(){
     return color;
 }
 
+bool block :: move(Direction d, grid* g) {
+    bool legal = true;
+    if (d == DOWN) {
+        for (int i = 0; i < 4; i++) {
+            bool sameBlock = false;
+            for (int j = 0; j < 4; j++)
+                if (coords[i].first == coords[j].first && coords[i].second + 1 == coords[j].second) sameBlock = true;
+            if ((g -> squares[coords[i].first][coords[i].second + 1] != WHITE && sameBlock == false) || coords[i].second == 19) {
+                legal = false;
+                break;
+            }
+        }
+        if (legal == true) {
+            g -> updateBlock(this, true);
+            for (int i = 0; i < 4; i++) {
+                coords[i].second++;
+            }
+            g -> updateBlock(this, false);
+        }
+        
+    }
+    
+    return legal ? false : true;
+}
+
 /*
 void block :: paintBlock(SDL_Renderer *renderer) {
     int rgb[3] = {0,0,0};
@@ -176,9 +201,10 @@ void grid :: updateXY(int X, int Y, Color c) {
     squares[X][Y] = c;
 }
 
-void grid :: updateBlock(block b, bool deleting) {
-    pair<int,int>* coords = b.getCoords();
-    Color c = deleting ? WHITE : b.getColor();
+void grid :: updateBlock(block* b, bool deleting) {
+    cout << "hello world" << endl;
+    pair<int,int>* coords = b -> getCoords();
+    Color c = deleting ? WHITE : b -> getColor();
     for (int i = 0; i < 4; i++) {
         cout << coords[i].first << " " << coords[i].second << endl;
         squares[coords[i].first][coords[i].second] = c;

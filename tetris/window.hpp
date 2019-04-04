@@ -6,6 +6,7 @@ using namespace std;
 
 enum Color {RED, GREEN, BLUE, WHITE, BLACK, YELLOW, PURPLE, ORANGE, CYAN};
 enum Piece {LONG,SQUARE,L1,L2,S1,S2,T};
+enum Direction {LEFT,DOWN,RIGHT};
 
 class windowFunctions;
 class grid;
@@ -25,7 +26,7 @@ public:
     Color squares[10][20];
     grid();
     void updateXY(int X, int Y, Color c);
-    void updateBlock(block b, bool deleting);
+    void updateBlock(block* b, bool deleting);
     void paintBoard(SDL_Renderer* renderer, const int W, const int H);
 };
 
@@ -40,6 +41,7 @@ public:
     block(Piece p);
     pair<int,int>* getCoords();
     Color getColor();
+    bool move(Direction d, grid* g);
     ~block();
 };
 
