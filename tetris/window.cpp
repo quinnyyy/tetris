@@ -79,7 +79,7 @@ pair<int,int>* block :: mapStartingCoords(Piece p) {
         case S2: {
             coordinates[0] = {3,1};
             coordinates[1] = {4,1};
-            coordinates[2] = {4,0};
+            coordinates[2] = {4,0}; // point of rotation
             coordinates[3] = {5,0};
             break;
         }
@@ -92,15 +92,15 @@ pair<int,int>* block :: mapStartingCoords(Piece p) {
         }
         case L2: {
             coordinates[0] = {3,1};
-            coordinates[1] = {4,1};
-            coordinates[2] = {5,1};
+            coordinates[1] = {5,1};
+            coordinates[2] = {4,1};
             coordinates[3] = {5,0};
             break;
         }
         case T: {
             coordinates[0] = {3,1};
-            coordinates[1] = {4,1};
-            coordinates[2] = {4,0};
+            coordinates[1] = {4,0};
+            coordinates[2] = {4,1};
             coordinates[3] = {5,1};
             break;
         }
@@ -170,10 +170,104 @@ bool block :: move(Direction d, grid* g) {
             }
             g -> updateBlock(this, false);
         }
-        
+        return legal ? false : true;
     }
     
-    return legal ? false : true;
+    if (d == LEFT) {
+        for (int i = 0; i < 4; i++) {
+            bool sameBlock = false;
+            for (int j = 0; j < 4; j++)
+                if (coords[i].first - 1 == coords[j].first && coords[i].second == coords[j].second) sameBlock = true;
+            if ((g -> squares[coords[i].first - 1][coords[i].second] != WHITE && sameBlock == false) || coords[i].first == 0) {
+                legal = false;
+                break;
+            }
+        }
+        if (legal == true) {
+            g -> updateBlock(this, true);
+            for (int i = 0; i < 4; i++) {
+                coords[i].first--;
+            }
+            g -> updateBlock(this, false);
+        }
+    }
+    
+    if (d == RIGHT) {
+        for (int i = 0; i < 4; i++) {
+            bool sameBlock = false;
+            for (int j = 0; j < 4; j++)
+                if (coords[i].first + 1 == coords[j].first && coords[i].second == coords[j].second) sameBlock = true;
+            if ((g -> squares[coords[i].first + 1][coords[i].second] != WHITE && sameBlock == false) || coords[i].first == 9) {
+                legal = false;
+                break;
+            }
+        }
+        if (legal == true) {
+            g -> updateBlock(this, true);
+            for (int i = 0; i < 4; i++) {
+                coords[i].first++;
+            }
+            g -> updateBlock(this, false);
+        }
+    }
+    
+    return false;
+}
+
+bool block :: rotate(grid* g) {
+    g -> updateBlock(this, true);
+    pair<int,int>* newCoords = new pair<int,int>[4];
+    if (piece == S2 || piece == S1 || piece == L1 || piece == L2 || piece == T) {
+        for (int i = 0; i < 4; i++) {
+            if (coords[i].second < coords[2].second) {
+                newCoords[i].second = coords[2].second + (coords[i].first - coords[2].first);
+                newCoords[i].first = coords[2].first + 1;
+            } else if (coords[i].second == coords[2].second) {
+                newCoords[i].second = coords[2].second + (coords[i].first - coords[2].first);
+                newCoords[i].first = coords[2].first;
+            } else {
+                newCoords[i].second = coords[2].second + (coords[i].first - coords[2].first);
+                newCoords[i].first = coords[2].first - 1;
+            }
+        }
+    }
+    if (piece == LONG) {
+        for (int i = 0; i < 4; i++) {
+            if (coords[i].second == coords[2].second) {
+                newCoords[i].second = coords[2].second + (coords[i].first - coords[2].first);
+                newCoords[i].first = coords[2].first;
+            } else {
+                newCoords[i].first = coords[2].first + (coords[i].second - coords[2].second);
+                newCoords[i].second = coords[2].second;
+            }
+        }
+    }
+    bool legal = true;
+    for (int i = 0; i < 4; i++) {
+        bool sameBlock = false;
+        for (int j = 0; j < 4; j++) {
+            if (newCoords[i].first == coords[j].first && newCoords[i].second == coords[j].second) sameBlock = true;
+        }
+        if (g -> squares[newCoords[i].first][newCoords[i].second] != WHITE || newCoords[i].first < 0 || newCoords[i].first > 9 || newCoords[i].second < 0 || newCoords[i].second > 19)
+            legal = false;
+    }
+    if (legal == false) {
+        cout << "AHAHAHHAHAHAHA" << endl;
+        delete[] newCoords;
+        g -> updateBlock(this, false);
+    } else {
+        g -> updateBlock(this, true);
+        delete[] coords;
+        coords = newCoords;
+        cout << "abcd: " << newCoords[0].first << " " << newCoords[0].second << endl;
+        cout << "abcd: " << newCoords[1].first << " " << newCoords[1].second << endl;
+        cout << "abcd: " << newCoords[2].first << " " << newCoords[2].second << endl;
+        cout << "abcd: " << newCoords[3].first << " " << newCoords[3].second << endl;
+
+        g -> updateBlock(this, false);
+    
+    }
+    return false;
 }
 
 /*

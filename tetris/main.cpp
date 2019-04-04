@@ -25,7 +25,7 @@ int main(int argc, char* args[]) {
         //block test(SQUARE);
         //Board.updateBlock(&test, false);
 
-        
+        srand(time(NULL));
         bool quit = false;
         SDL_Event e;
         
@@ -35,7 +35,7 @@ int main(int argc, char* args[]) {
         while (!quit) {
             if (newBlock == true) {
                 if (myBlock == nullptr) delete myBlock;
-                myBlock = new block(SQUARE);
+                myBlock = new block(Piece(rand() % 7));
                 Board.updateBlock(myBlock, false);
                 newBlock = false;
             }
@@ -44,13 +44,35 @@ int main(int argc, char* args[]) {
                     quit = true;
                 } else if (e.type == SDL_KEYDOWN) {
                     switch(e.key.keysym.sym) {
-                        case SDLK_UP: {
+                        case SDLK_ESCAPE: {
                             quit = true;
+                            break;
+                        }
+                        case SDLK_SPACE: {
+                            while (newBlock == false) {
+                                newBlock = myBlock -> move(DOWN, &Board);
+                            }
+                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
+                            break;
+                        }
+                        case SDLK_UP: {
+                            newBlock = myBlock -> rotate(&Board);
+                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         case SDLK_DOWN: {
                             //Board.updateBlock(&test,false);
                             newBlock = myBlock -> move(DOWN, &Board);
+                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
+                            break;
+                        }
+                        case SDLK_LEFT: {
+                            newBlock = myBlock -> move(LEFT, &Board);
+                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
+                            break;
+                        }
+                        case SDLK_RIGHT: {
+                            newBlock = myBlock -> move(RIGHT, &Board);
                             Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }

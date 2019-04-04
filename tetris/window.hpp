@@ -42,6 +42,7 @@ public:
     pair<int,int>* getCoords();
     Color getColor();
     bool move(Direction d, grid* g);
+    bool rotate(grid* g);
     ~block();
 };
 
