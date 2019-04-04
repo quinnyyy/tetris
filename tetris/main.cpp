@@ -3,42 +3,51 @@
 #include <iostream>
 using namespace std;
 
-const int SCREEN_WIDTH = 512;
-const int SCREEN_HEIGHT = 512;
+const int SCREEN_WIDTH = 300;
+const int SCREEN_HEIGHT = 600;
+const int BLOCK_WIDTH = SCREEN_WIDTH/10;
+const int BLOCK_HEIGHT = SCREEN_HEIGHT/20;
+const int frameRate = 30;
+const int frameMs = 1000 / frameRate;
 
 windowFunctions fxns; //class containing helper functions
 
 SDL_Window* window = NULL;
 SDL_Surface* surface = NULL;
-SDL_Renderer* background = NULL; //renderer for the background
-SDL_Renderer* blocks = NULL; //renderer for blocks
+SDL_Renderer* renderer = NULL;
 
+grid Board;
 
 int main(int argc, char* args[]) {
     if (fxns.init(&window, &surface, SCREEN_WIDTH, SCREEN_HEIGHT)) {
-        background = SDL_CreateRenderer(window, -1, 0);
-
-        fxns.setBackground(background, WHITE);
+        renderer = SDL_CreateRenderer(window, 0, 0);
         
-        
+        block test(LONG);
+        Board.updateBlock(test, false);
         
         bool quit = false;
         SDL_Event e;
+        
         while (!quit) {
             while (SDL_PollEvent(&e) != 0) {
                 if (e.type == SDL_QUIT) {
                     quit = true;
                 } else if (e.type == SDL_KEYDOWN) {
                     switch(e.key.keysym.sym) {
-                        case SDLK_UP:
+                        case SDLK_UP: {
                             quit = true;
                             break;
-                        default:
+                        }
+                        default: {
                             break;
+                        }
                     }
                 }
             }
-            SDL_UpdateWindowSurface(window);
+            
+            SDL_Delay(frameMs);
+            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
+            //SDL_UpdateWindowSurface(window);
         }
         
     }
