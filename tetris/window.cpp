@@ -302,6 +302,19 @@ void grid :: updateBlock(block* b, bool deleting) {
     }
 }
 
+bool grid :: checkLose(block *b) {
+    pair<int,int>* coords = b -> getCoords();
+    for (int i = 0; i < 4; i++) {
+        if (squares[coords[i].first][coords[i].second] != WHITE)
+            return true;
+    }
+    for (int i = 0; i < 10; i++) {
+        if (squares[i][0] != WHITE)
+            return true;
+    }
+    return false;
+}
+
 void grid :: paintBoard(SDL_Renderer *renderer, const int W, const int H) {
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 20; j++) {

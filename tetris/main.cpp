@@ -36,18 +36,22 @@ int main(int argc, char* args[]) {
         int fallTime = 1000;
         unsigned int startTime = 0;
         unsigned int timeDiff = 0;
+        bool lose = false;
         
-        while (!quit) {
+        while (!quit && !lose) {
             if (newBlock == true) {
                 score += Board.checkRows();
-                cout << score << endl;
-                cout << fallTime << endl;
                 if (score >= 10) {
                     score -= 10;
                     fallTime /= 2;
                 }
                 if (myBlock != nullptr) delete myBlock;
                 myBlock = new block(Piece(rand() % 7));
+                lose = Board.checkLose(myBlock);
+                if (lose == true) {
+                    cout << "LOSER" << endl;
+                    break; 
+                }
                 Board.updateBlock(myBlock, false);
                 newBlock = false;
                 startTime = SDL_GetTicks();

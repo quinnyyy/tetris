@@ -29,6 +29,7 @@ public:
     void updateBlock(block* b, bool deleting);
     void paintBoard(SDL_Renderer* renderer, const int W, const int H);
     int checkRows();
+    bool checkLose(block* b);
 };
 
 class block {
