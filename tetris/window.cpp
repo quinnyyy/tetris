@@ -242,6 +242,7 @@ bool block :: rotate(grid* g) {
             }
         }
     }
+    if (piece != SQUARE) {
     bool legal = true;
     for (int i = 0; i < 4; i++) {
         bool sameBlock = false;
@@ -252,20 +253,18 @@ bool block :: rotate(grid* g) {
             legal = false;
     }
     if (legal == false) {
-        cout << "AHAHAHHAHAHAHA" << endl;
         delete[] newCoords;
         g -> updateBlock(this, false);
     } else {
         g -> updateBlock(this, true);
         delete[] coords;
         coords = newCoords;
-        cout << "abcd: " << newCoords[0].first << " " << newCoords[0].second << endl;
-        cout << "abcd: " << newCoords[1].first << " " << newCoords[1].second << endl;
-        cout << "abcd: " << newCoords[2].first << " " << newCoords[2].second << endl;
-        cout << "abcd: " << newCoords[3].first << " " << newCoords[3].second << endl;
 
         g -> updateBlock(this, false);
     
+    }
+    } else {
+        g -> updateBlock(this, false);
     }
     return false;
 }
@@ -296,11 +295,9 @@ void grid :: updateXY(int X, int Y, Color c) {
 }
 
 void grid :: updateBlock(block* b, bool deleting) {
-    cout << "hello world" << endl;
     pair<int,int>* coords = b -> getCoords();
     Color c = deleting ? WHITE : b -> getColor();
     for (int i = 0; i < 4; i++) {
-        cout << coords[i].first << " " << coords[i].second << endl;
         squares[coords[i].first][coords[i].second] = c;
     }
 }
@@ -320,6 +317,30 @@ void grid :: paintBoard(SDL_Renderer *renderer, const int W, const int H) {
             }
     }
     SDL_RenderPresent(renderer);
+}
+
+int grid :: checkRows() {
+    int rowsCleared = 0;
+    for (int i = 19; i >= 0; i--) {
+        bool full = true;
+        for (int j = 0; j < 10; j++) {
+            if (squares[j][i] == WHITE) {
+                full = false;
+                break;
+            }
+        }
+        if (full == true) {
+            for (int k = i; k >= 0; k--) {
+                for (int j = 0; j < 10; j++) {
+                    if (k == 0) squares[j][k] = WHITE;
+                    else squares[j][k] = squares[j][k-1];
+                }
+            }
+            i++;
+            rowsCleared++;
+        }
+    }
+    return rowsCleared;
 }
 
 int* grid :: mapColor(Color c) {

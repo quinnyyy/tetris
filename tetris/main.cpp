@@ -31,13 +31,31 @@ int main(int argc, char* args[]) {
         
         bool newBlock = true;
         block* myBlock = nullptr;
+        int score = 0;
+        
+        int fallTime = 1000;
+        unsigned int startTime = 0;
+        unsigned int timeDiff = 0;
         
         while (!quit) {
             if (newBlock == true) {
-                if (myBlock == nullptr) delete myBlock;
+                score += Board.checkRows();
+                cout << score << endl;
+                cout << fallTime << endl;
+                if (score >= 10) {
+                    score -= 10;
+                    fallTime /= 2;
+                }
+                if (myBlock != nullptr) delete myBlock;
                 myBlock = new block(Piece(rand() % 7));
                 Board.updateBlock(myBlock, false);
                 newBlock = false;
+                startTime = SDL_GetTicks();
+            }
+            timeDiff = SDL_GetTicks() - startTime;
+            if (timeDiff > fallTime) {
+                newBlock = myBlock -> move(DOWN, &Board);
+                startTime = SDL_GetTicks();
             }
             while (SDL_PollEvent(&e) != 0) {
                 if (e.type == SDL_QUIT) {
@@ -52,39 +70,37 @@ int main(int argc, char* args[]) {
                             while (newBlock == false) {
                                 newBlock = myBlock -> move(DOWN, &Board);
                             }
-                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         case SDLK_UP: {
                             newBlock = myBlock -> rotate(&Board);
-                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         case SDLK_DOWN: {
                             //Board.updateBlock(&test,false);
                             newBlock = myBlock -> move(DOWN, &Board);
-                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         case SDLK_LEFT: {
                             newBlock = myBlock -> move(LEFT, &Board);
-                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         case SDLK_RIGHT: {
                             newBlock = myBlock -> move(RIGHT, &Board);
-                            Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
                             break;
                         }
                         default: {
                             break;
                         }
+                        
                     }
                 }
             }
             
-            SDL_Delay(frameMs);
             Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
+
+            SDL_Delay(frameMs);
+            //Board.paintBoard(renderer, BLOCK_WIDTH, BLOCK_HEIGHT);
             //SDL_UpdateWindowSurface(window);
         }
         

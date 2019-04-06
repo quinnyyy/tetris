@@ -28,6 +28,7 @@ public:
     void updateXY(int X, int Y, Color c);
     void updateBlock(block* b, bool deleting);
     void paintBoard(SDL_Renderer* renderer, const int W, const int H);
+    int checkRows();
 };
 
 class block {
